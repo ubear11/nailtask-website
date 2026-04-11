@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>CMS操作手册 – NailTask 内容管理系统</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      color: #1e293b;
+      line-height: 1.8;
+      background: #f8fafc;
+    }
+    .header {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 4px solid #f59e0b;
+    }
+    .header h1 { font-size: 28px; margin-bottom: 8px; }
+    .header p { color: #94a3b8; font-size: 16px; }
+    .container { max-width: 960px; margin: 0 auto; padding: 30px 20px; }
+    .toc {
+      background: white;
+      border-radius: 12px;
+      padding: 24px 32px;
+      margin-bottom: 32px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .toc h2 { font-size: 20px; margin-bottom: 16px; color: #0f172a; }
+    .toc ul { list-style: none; padding: 0; }
+    .toc li { padding: 6px 0; }
+    .toc a { color: #d97706; text-decoration: none; font-weight: 500; }
+    .toc a:hover { text-decoration: underline; }
+    .section {
+      background: white;
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .section h2 {
+      font-size: 22px;
+      color: #0f172a;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #f59e0b;
+    }
+    .section h3 {
+      font-size: 18px;
+      color: #334155;
+      margin: 20px 0 10px;
+    }
+    .section p, .section li { font-size: 15px; color: #475569; }
+    .section ul, .section ol { padding-left: 24px; margin: 12px 0; }
+    .section li { margin-bottom: 8px; }
+    .step {
+      background: #fffbeb;
+      border-left: 4px solid #f59e0b;
+      padding: 12px 16px;
+      margin: 12px 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .step strong { color: #92400e; }
+    .tip {
+      background: #ecfdf5;
+      border-left: 4px solid #10b981;
+      padding: 12px 16px;
+      margin: 12px 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .tip strong { color: #065f46; }
+    .warning {
+      background: #fef2f2;
+      border-left: 4px solid #ef4444;
+      padding: 12px 16px;
+      margin: 12px 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .warning strong { color: #991b1b; }
+    .field-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+    .field-table th, .field-table td { border: 1px solid #e2e8f0; padding: 8px 12px; text-align: left; }
+    .field-table th { background: #f8fafc; font-weight: 600; color: #0f172a; }
+    .field-table td { color: #475569; }
+    code {
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-family: 'Menlo', 'Monaco', monospace;
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 24px;
+      padding: 10px 24px;
+      background: #f59e0b;
+      color: #0f172a;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    .back-link:hover { background: #d97706; }
+    @media (max-width: 768px) {
+      .container { padding: 16px; }
+      .section { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>NailTask CMS 操作手册</h1>
+  <p>内容管理系统使用指南 · 全中文版</p>
+</div>
+
+<div class="container">
+
+  <!-- 目录 -->
+  <div class="toc">
+    <h2>目录</h2>
+    <ul>
+      <li><a href="#login">一、登录CMS后台</a></li>
+      <li><a href="#dashboard">二、后台面板概览</a></li>
+      <li><a href="#media">三、媒体资产库管理</a></li>
+      <li><a href="#products">四、产品管理</a></li>
+      <li><a href="#blog">五、博客与成功案例</a></li>
+      <li><a href="#certifications">六、信任背书库（证书管理）</a></li>
+      <li><a href="#resources">七、资源下载中心</a></li>
+      <li><a href="#testimonials">八、客户见证</a></li>
+      <li><a href="#faq">九、常见问题管理</a></li>
+      <li><a href="#service-network">十、全球服务网络</a></li>
+      <li><a href="#pages">十一、页面管理</a></li>
+      <li><a href="#settings">十二、站点设置</a></li>
+      <li><a href="#seo">十三、SEO配置指南</a></li>
+      <li><a href="#workflow">十四、内容发布工作流</a></li>
+      <li><a href="#troubleshooting">十五、常见问题与故障排除</a></li>
+    </ul>
+  </div>
+
+  <!-- 一、登录 -->
+  <div class="section" id="login">
+    <h2>一、登录CMS后台</h2>
+
+    <h3>1.1 访问地址</h3>
+    <p>在浏览器地址栏输入以下地址进入CMS后台：</p>
+    <div class="step">
+      <strong>后台地址：</strong>https://您的域名/admin/
+    </div>
+
+    <h3>1.2 登录方式</h3>
+    <p>本系统使用 Netlify Identity 进行身份认证：</p>
+    <ol>
+      <li>点击页面中的 <strong>"Login with Netlify Identity"</strong> 按钮</li>
+      <li>输入您的注册邮箱和密码</li>
+      <li>首次使用需要由管理员邀请并设置密码</li>
+    </ol>
+
+    <div class="tip">
+      <strong>提示：</strong>如果您忘记密码，请点击登录页面的"忘记密码"链接，系统会发送重置邮件到您的注册邮箱。
+    </div>
+
+    <h3>1.3 邀请新用户</h3>
+    <ol>
+      <li>登录 <a href="https://app.netlify.com" target="_blank">Netlify 管理面板</a></li>
+      <li>进入 Site Settings → Identity</li>
+      <li>点击 "Invite users" 输入新用户邮箱</li>
+      <li>新用户会收到邀请邮件，点击链接设置密码即可</li>
+    </ol>
+  </div>
+
+  <!-- 二、面板概览 -->
+  <div class="section" id="dashboard">
+    <h2>二、后台面板概览</h2>
+
+    <p>登录后，左侧导航栏显示所有内容模块：</p>
+
+    <table class="field-table">
+      <tr><th>模块名称</th><th>功能说明</th></tr>
+      <tr><td>媒体资产库 / Media Assets</td><td>统一管理全站图片、视频资源</td></tr>
+      <tr><td>产品管理 / Products</td><td>管理产品详情、参数、图集</td></tr>
+      <tr><td>博客管理 / Blog</td><td>管理博客文章和成功案例</td></tr>
+      <tr><td>信任背书库 / Trust & Authority</td><td>管理企业资质证书</td></tr>
+      <tr><td>资源下载中心 / Resource Center</td><td>管理可下载的PDF资源</td></tr>
+      <tr><td>客户见证 / Testimonials</td><td>管理客户评价</td></tr>
+      <tr><td>常见问题 / FAQ</td><td>管理常见问答</td></tr>
+      <tr><td>全球服务网络 / Global Service Network</td><td>管理全球办事处信息</td></tr>
+      <tr><td>页面管理 / Pages</td><td>编辑首页、关于页等内容</td></tr>
+      <tr><td>站点设置 / Site Settings</td><td>全站配置、SEO、分析工具</td></tr>
+    </table>
+
+    <div class="tip">
+      <strong>提示：</strong>点击任何模块名称即可进入该模块的内容列表。点击右上角 "New [模块名]" 按钮创建新内容。
+    </div>
+  </div>
+
+  <!-- 三、媒体资产库 -->
+  <div class="section" id="media">
+    <h2>三、媒体资产库管理</h2>
+
+    <p><strong>重要原则：</strong>所有模块中使用的图片和视频应先上传到媒体资产库，再在其他模块中引用。这样可以：</p>
+    <ul>
+      <li>避免重复上传相同文件</li>
+      <li>统一管理SEO Alt Text，引用时自动继承</li>
+      <li>通过标签快速筛选和查找资源</li>
+    </ul>
+
+    <h3>3.1 添加新媒体资产</h3>
+    <ol>
+      <li>进入 <strong>"媒体资产库"</strong> 模块</li>
+      <li>点击 <strong>"New 媒体资产"</strong></li>
+      <li>填写以下字段：</li>
+    </ol>
+
+    <table class="field-table">
+      <tr><th>字段</th><th>说明</th><th>必填</th></tr>
+      <tr><td>资产名称</td><td>资源的描述性名称，如"工厂全景航拍"</td><td>是</td></tr>
+      <tr><td>Slug</td><td>URL友好标识符，如"factory-aerial-view"</td><td>是</td></tr>
+      <tr><td>资产类型</td><td>选择：图片/视频/文档</td><td>是</td></tr>
+      <tr><td>文件上传</td><td>上传本地文件</td><td>二选一</td></tr>
+      <tr><td>外部URL</td><td>填入YouTube/Vimeo等外部链接</td><td>二选一</td></tr>
+      <tr><td>SEO Alt Text</td><td>图片的SEO替代文本</td><td>是</td></tr>
+      <tr><td>标签</td><td>分类标签，可多选</td><td>是</td></tr>
+    </table>
+
+    <h3>3.2 标签分类说明</h3>
+    <ul>
+      <li><strong>产品演示</strong> - 产品使用和展示图片/视频</li>
+      <li><strong>工厂环境</strong> - 工厂、生产线、仓库照片</li>
+      <li><strong>Hero Banner</strong> - 首页和各页面顶部横幅图</li>
+      <li><strong>证书资质</strong> - CE、ISO等证书扫描件</li>
+      <li><strong>客户案例</strong> - 客户现场施工照片</li>
+      <li><strong>技术图解</strong> - 产品爆炸图、技术示意图</li>
+      <li><strong>博客配图</strong> - 博客文章内配图</li>
+      <li><strong>团队照片</strong> - 团队和公司活动照片</li>
+    </ul>
+  </div>
+
+  <!-- 四、产品管理 -->
+  <div class="section" id="products">
+    <h2>四、产品管理</h2>
+
+    <p>产品管理模块是本系统最核心的模块，支持"工业级"深度产品属性配置。</p>
+
+    <h3>4.1 创建新产品</h3>
+    <ol>
+      <li>进入 <strong>"产品管理"</strong> 模块</li>
+      <li>点击 <strong>"New 产品"</strong></li>
+      <li>按顺序填写各部分字段</li>
+    </ol>
+
+    <h3>4.2 基本信息</h3>
+    <table class="field-table">
+      <tr><th>字段</th><th>说明</th><th>示例</th></tr>
+      <tr><td>产品名称</td><td>产品的完整名称</td><td>Cordless Concrete Nail Gun</td></tr>
+      <tr><td>Slug</td><td>URL标识符（小写英文+连字符）</td><td>dccn100x2</td></tr>
+      <tr><td>产品型号</td><td>产品型号编码</td><td>DCCN100X2</td></tr>
+      <tr><td>产品分类</td><td>选择所属分类</td><td>混凝土钉枪</td></tr>
+      <tr><td>简短描述</td><td>产品简要介绍（1-2句）</td><td>20V锂电无绳混凝土钉枪</td></tr>
+      <tr><td>详细描述</td><td>支持Markdown格式的详细介绍</td><td>—</td></tr>
+      <tr><td>主图</td><td>产品主图（建议800x800px）</td><td>—</td></tr>
+    </table>
+
+    <h3>4.3 硬件参数（展开填写）</h3>
+    <p>点击 <strong>"硬件参数"</strong> 展开面板，填写以下工业级参数：</p>
+    <table class="field-table">
+      <tr><th>字段</th><th>说明</th></tr>
+      <tr><td>钉子类型</td><td>如：混凝土钉、框架钉、精装钉</td></tr>
+      <tr><td>钉子长度范围</td><td>如：15-72mm</td></tr>
+      <tr><td>电机类型</td><td>选择：无刷/有刷/N/A</td></tr>
+      <tr><td>弹夹容量</td><td>如：40 pins</td></tr>
+      <tr><td>重量 (kg)</td><td>含电池重量</td></tr>
+      <tr><td>冲击能量 (J)</td><td>焦耳值</td></tr>
+      <tr><td>电压 (V)</td><td>如：20V</td></tr>
+      <tr><td>击发速度</td><td>如：2发/秒</td></tr>
+      <tr><td>电池容量</td><td>如：4.0Ah</td></tr>
+      <tr><td>外壳材质</td><td>如：镁合金</td></tr>
+      <tr><td>认证</td><td>如：CE, RoHS, ISO 9001</td></tr>
+    </table>
+
+    <h3>4.4 媒体增强</h3>
+    <ul>
+      <li><strong>技术爆炸图：</strong>上传产品的零件爆炸图，用于前端交互展示</li>
+      <li><strong>演示视频：</strong>添加15-30秒产品演示短视频（支持多个）</li>
+      <li><strong>产品图集：</strong>添加多张产品展示图片（建议含Alt Text）</li>
+    </ul>
+
+    <h3>4.5 关联推荐与PDF规格书</h3>
+    <ul>
+      <li><strong>关联推荐产品：</strong>输入关联产品的Slug，实现"看了又看"推荐</li>
+      <li><strong>PDF规格书：</strong>上传产品规格PDF，供前端用户直接下载</li>
+    </ul>
+
+    <div class="tip">
+      <strong>提示：</strong>产品的SEO设置在最下方折叠面板中。如果留空，系统会自动使用产品名称和描述。建议为重点产品手动填写SEO字段以获得更好的搜索引擎排名。
+    </div>
+  </div>
+
+  <!-- 五、博客 -->
+  <div class="section" id="blog">
+    <h2>五、博客与成功案例</h2>
+
+    <h3>5.1 创建博客文章</h3>
+    <ol>
+      <li>进入 <strong>"博客管理"</strong> 模块</li>
+      <li>点击 <strong>"New 博客文章"</strong></li>
+      <li>选择分类（产品指南/行业洞察/商业/公司新闻/技术/成功案例）</li>
+      <li>使用Markdown编辑器撰写正文</li>
+    </ol>
+
+    <h3>5.2 发布成功案例</h3>
+    <p>成功案例是博客的一种特殊分类。创建时：</p>
+    <ol>
+      <li>分类选择 <strong>"成功案例 / Case Studies"</strong></li>
+      <li>展开下方 <strong>"案例研究字段"</strong> 面板</li>
+      <li>填写行业分类、客户痛点、解决方案等专属字段</li>
+      <li>上传现场图集和视频</li>
+    </ol>
+
+    <table class="field-table">
+      <tr><th>案例专属字段</th><th>说明</th></tr>
+      <tr><td>行业分类</td><td>建筑工程/基础设施/制造业/农业/能源</td></tr>
+      <tr><td>客户痛点</td><td>描述客户遇到的主要问题</td></tr>
+      <tr><td>解决方案详情</td><td>详细描述NailTask提供的解决方案</td></tr>
+      <tr><td>现场图集</td><td>施工现场照片（支持多张）</td></tr>
+      <tr><td>案例视频</td><td>YouTube/Vimeo链接</td></tr>
+    </table>
+
+    <div class="tip">
+      <strong>写作建议：</strong>每篇文章建议800-1500字，配3-5张图片。使用二级标题(##)和三级标题(###)组织内容结构，有助于SEO。
+    </div>
+  </div>
+
+  <!-- 六、证书 -->
+  <div class="section" id="certifications">
+    <h2>六、信任背书库（证书管理）</h2>
+
+    <p>管理企业获得的各类资质认证证书。</p>
+
+    <h3>6.1 添加证书</h3>
+    <ol>
+      <li>进入 <strong>"信任背书库"</strong> 模块</li>
+      <li>点击 <strong>"New 证书"</strong></li>
+      <li>选择证书分类（CE/ISO/RoHS/UL/TUV/SGS/其他）</li>
+      <li>填写证书编号、颁发机构、有效期</li>
+      <li>上传证书扫描件和PDF</li>
+    </ol>
+
+    <div class="warning">
+      <strong>注意：</strong>请及时更新证书到期日期，过期证书应及时替换或标注。建议设置日历提醒，在证书到期前30天更新。
+    </div>
+  </div>
+
+  <!-- 七、资源中心 -->
+  <div class="section" id="resources">
+    <h2>七、资源下载中心</h2>
+
+    <p>管理可供客户下载的PDF文件，如产品手册、参数表、产品目录等。这些资源可用作营销获客的"Lead Magnet"。</p>
+
+    <h3>7.1 添加新资源</h3>
+    <ol>
+      <li>进入 <strong>"资源下载中心"</strong> 模块</li>
+      <li>点击 <strong>"New 资源"</strong></li>
+      <li>选择文件分类</li>
+      <li>上传PDF文件</li>
+      <li>可选：上传自定义封面图（建议 400x560px）</li>
+      <li>填写文件大小和描述</li>
+      <li>如关联特定产品，填写产品Slug</li>
+    </ol>
+
+    <h3>7.2 文件分类说明</h3>
+    <table class="field-table">
+      <tr><th>分类</th><th>说明</th></tr>
+      <tr><td>产品手册</td><td>完整的产品使用手册</td></tr>
+      <tr><td>参数规格表</td><td>产品技术参数一览表</td></tr>
+      <tr><td>产品目录</td><td>全线产品目录册</td></tr>
+      <tr><td>安装指南</td><td>产品安装步骤说明</td></tr>
+      <tr><td>安全数据表</td><td>产品安全使用数据</td></tr>
+      <tr><td>白皮书</td><td>行业技术白皮书</td></tr>
+    </table>
+  </div>
+
+  <!-- 八、客户见证 -->
+  <div class="section" id="testimonials">
+    <h2>八、客户见证</h2>
+
+    <h3>8.1 添加客户评价</h3>
+    <ol>
+      <li>进入 <strong>"客户见证"</strong> 模块</li>
+      <li>点击 <strong>"New 客户见证"</strong></li>
+      <li>填写客户基本信息（姓名、职位、国家为必填）</li>
+      <li>选择评价类型（文字/视频）</li>
+      <li>输入评价内容</li>
+      <li>上传客户头像（建议 200x200px 正方形）</li>
+    </ol>
+
+    <div class="tip">
+      <strong>提示：</strong>"是否展示"开关可控制评价是否在前端显示。"排序权重"数字越大越靠前。
+    </div>
+  </div>
+
+  <!-- 九、FAQ -->
+  <div class="section" id="faq">
+    <h2>九、常见问题管理</h2>
+
+    <h3>9.1 添加FAQ</h3>
+    <ol>
+      <li>进入 <strong>"常见问题"</strong> 模块</li>
+      <li>点击 <strong>"New 问答"</strong></li>
+      <li>填写问题和答案（答案支持Markdown格式）</li>
+      <li>选择分类（技术/物流/售后/订单/OEM/产品使用）</li>
+      <li>开启/关闭 <strong>"SEO结构化数据"</strong> 开关</li>
+    </ol>
+
+    <h3>9.2 SEO结构化数据说明</h3>
+    <p>开启"SEO结构化数据"后，该FAQ将以 <code>application/ld+json</code> 格式输出到页面，这有助于：</p>
+    <ul>
+      <li>在Google搜索结果中显示Rich Snippet（丰富摘要）</li>
+      <li>提升页面在搜索结果中的展示面积</li>
+      <li>增加点击率（CTR）</li>
+    </ul>
+  </div>
+
+  <!-- 十、服务网络 -->
+  <div class="section" id="service-network">
+    <h2>十、全球服务网络</h2>
+
+    <h3>10.1 添加服务节点</h3>
+    <ol>
+      <li>进入 <strong>"全球服务网络"</strong> 模块</li>
+      <li>点击 <strong>"New 服务节点"</strong></li>
+      <li>选择所在区域，填写国家、城市</li>
+      <li>填写联系人和联系方式</li>
+      <li>输入经纬度坐标（用于地图展示）</li>
+      <li>添加服务范围列表</li>
+    </ol>
+
+    <h3>10.2 获取经纬度坐标</h3>
+    <div class="step">
+      <strong>方法：</strong>打开 <a href="https://www.google.com/maps" target="_blank">Google Maps</a>，右键点击目标位置，即可看到经纬度坐标。格式如：纬度 30.2741，经度 120.1551
+    </div>
+  </div>
+
+  <!-- 十一、页面管理 -->
+  <div class="section" id="pages">
+    <h2>十一、页面管理</h2>
+
+    <p>页面管理模块用于编辑各固定页面的内容。</p>
+
+    <h3>11.1 首页设置</h3>
+    <ul>
+      <li><strong>Hero 标语：</strong>首页顶部大标题</li>
+      <li><strong>Hero 副标题：</strong>标题下方说明文字</li>
+      <li><strong>Hero 描述：</strong>详细描述段落</li>
+      <li><strong>Hero 图片：</strong>首页背景图</li>
+      <li><strong>首屏视频：</strong>支持YouTube/Vimeo嵌入或本地视频，静音循环播放，可配置占位图</li>
+    </ul>
+
+    <h3>11.2 关于我们页面</h3>
+    <p>支持Markdown格式编辑公司介绍内容。</p>
+
+    <h3>11.3 联系我们页面</h3>
+    <p>编辑联系页面标题和副标题。</p>
+
+    <div class="tip">
+      <strong>提示：</strong>每个页面底部都有独立的SEO设置面板，可以自定义Meta Title、Description和Keywords。
+    </div>
+  </div>
+
+  <!-- 十二、站点设置 -->
+  <div class="section" id="settings">
+    <h2>十二、站点设置</h2>
+
+    <h3>12.1 常规设置</h3>
+    <p>在 <strong>"站点设置 → 常规设置"</strong> 中配置：</p>
+    <ul>
+      <li><strong>站点名称 / Logo / Favicon</strong></li>
+      <li><strong>分析追踪：</strong>GA4 ID、GTM ID、百度统计、Search Console验证码</li>
+      <li><strong>联系信息：</strong>邮箱、电话、WhatsApp、Skype、微信</li>
+      <li><strong>CRM集成：</strong>选择CRM类型（小满Okki/企业邮箱/自定义API），配置API地址和通知邮箱</li>
+      <li><strong>多语言设置：</strong>选择默认语言和启用的语言列表</li>
+    </ul>
+
+    <h3>12.2 社交媒体</h3>
+    <p>在 <strong>"站点设置 → 社交媒体"</strong> 中配置各社交平台链接。</p>
+
+    <h3>12.3 CRM集成配置</h3>
+    <p>系统支持三种CRM对接方式：</p>
+    <table class="field-table">
+      <tr><th>类型</th><th>说明</th><th>配置方式</th></tr>
+      <tr><td>小满 Okki CRM</td><td>自动推送线索到小满CRM</td><td>在Netlify环境变量中配置 <code>CRM_PROVIDER=okki</code> 和 <code>CRM_API_ENDPOINT</code></td></tr>
+      <tr><td>企业邮箱</td><td>新线索发送邮件通知</td><td>配置 <code>CRM_PROVIDER=email</code> 和 <code>CRM_NOTIFICATION_EMAIL</code></td></tr>
+      <tr><td>自定义API</td><td>推送到自定义API接口</td><td>配置 <code>CRM_PROVIDER=custom</code> 和 <code>CRM_API_ENDPOINT</code></td></tr>
+    </table>
+
+    <div class="step">
+      <strong>配置步骤：</strong>登录 Netlify → Site Settings → Environment Variables → 添加对应变量
+    </div>
+  </div>
+
+  <!-- 十三、SEO -->
+  <div class="section" id="seo">
+    <h2>十三、SEO配置指南</h2>
+
+    <h3>13.1 全站SEO</h3>
+    <ul>
+      <li><strong>sitemap.xml：</strong>已自动生成，位于 <code>/sitemap.xml</code></li>
+      <li><strong>robots.txt：</strong>已自动配置，位于 <code>/robots.txt</code></li>
+      <li><strong>JSON-LD 结构化数据：</strong>已在全站嵌入Organization类型结构化数据</li>
+    </ul>
+
+    <h3>13.2 页面级SEO</h3>
+    <p>每个产品、博客文章、页面都有独立的SEO设置面板：</p>
+    <table class="field-table">
+      <tr><th>字段</th><th>说明</th><th>建议</th></tr>
+      <tr><td>Meta Title</td><td>搜索引擎标题</td><td>50-60个字符，包含主要关键词</td></tr>
+      <tr><td>Meta Description</td><td>搜索引擎描述</td><td>120-160个字符，包含行动号召</td></tr>
+      <tr><td>Meta Keywords</td><td>关键词（逗号分隔）</td><td>5-10个相关关键词</td></tr>
+    </table>
+
+    <h3>13.3 图片SEO</h3>
+    <p>所有图片的Alt Text会从媒体资产库自动继承。确保在上传到媒体资产库时填写有意义的Alt Text描述。</p>
+
+    <div class="tip">
+      <strong>SEO最佳实践：</strong>
+      <ul>
+        <li>每个页面使用唯一的Meta Title和Description</li>
+        <li>在标题中自然包含目标关键词</li>
+        <li>博客文章使用结构化标题（H2/H3）</li>
+        <li>为所有图片提供描述性Alt Text</li>
+        <li>FAQ开启结构化数据以获取Rich Snippet</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 十四、工作流 -->
+  <div class="section" id="workflow">
+    <h2>十四、内容发布工作流</h2>
+
+    <h3>14.1 内容编辑流程</h3>
+    <ol>
+      <li>登录CMS后台</li>
+      <li>选择要编辑的模块</li>
+      <li>创建新内容或编辑已有内容</li>
+      <li>使用"预览"功能检查效果</li>
+      <li>点击 <strong>"Publish"</strong> 按钮发布</li>
+      <li>等待约1-2分钟，网站自动更新</li>
+    </ol>
+
+    <h3>14.2 发布状态说明</h3>
+    <table class="field-table">
+      <tr><th>状态</th><th>说明</th></tr>
+      <tr><td>Draft（草稿）</td><td>内容已保存但未发布，不会显示在前端</td></tr>
+      <tr><td>In Review（审核中）</td><td>等待审核后发布</td></tr>
+      <tr><td>Ready（就绪）</td><td>审核通过，可以发布</td></tr>
+      <tr><td>Published（已发布）</td><td>内容已发布到网站前端</td></tr>
+    </table>
+
+    <h3>14.3 媒体库调用流程</h3>
+    <div class="step">
+      <strong>标准流程：</strong>
+      <ol>
+        <li>先在"媒体资产库"上传图片/视频并填写Alt Text</li>
+        <li>在产品/博客等模块中，点击图片字段的"选择文件"</li>
+        <li>从已上传的文件中选择（路径会以 <code>/uploads/</code> 开头）</li>
+        <li>Alt Text会自动继承</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 十五、故障排除 -->
+  <div class="section" id="troubleshooting">
+    <h2>十五、常见问题与故障排除</h2>
+
+    <h3>Q: 登录页面一直加载？</h3>
+    <p>确认 Netlify Identity 已启用。进入 Netlify 管理面板 → Site Settings → Identity → 确认状态为 "Enabled"。</p>
+
+    <h3>Q: 发布后网站没有更新？</h3>
+    <p>发布后需要等待1-2分钟触发自动构建。可以在 Netlify 管理面板的 Deploys 页面查看构建状态。</p>
+
+    <h3>Q: 图片上传失败？</h3>
+    <ul>
+      <li>确认文件大小不超过 10MB</li>
+      <li>支持格式：JPG、PNG、GIF、WebP、SVG</li>
+      <li>建议使用英文文件名（避免中文和特殊字符）</li>
+    </ul>
+
+    <h3>Q: Markdown格式怎么用？</h3>
+    <ul>
+      <li><code># 标题</code> - 一级标题</li>
+      <li><code>## 标题</code> - 二级标题</li>
+      <li><code>**粗体**</code> - <strong>粗体文字</strong></li>
+      <li><code>*斜体*</code> - <em>斜体文字</em></li>
+      <li><code>[链接文字](URL)</code> - 超链接</li>
+      <li><code>![图片描述](图片URL)</code> - 插入图片</li>
+      <li><code>- 列表项</code> - 无序列表</li>
+      <li><code>1. 列表项</code> - 有序列表</li>
+    </ul>
+
+    <h3>Q: 如何备份内容？</h3>
+    <p>所有内容都存储在Git仓库中，天然具备版本历史。如需回退，可在Git中查看历史版本。</p>
+
+    <h3>Q: 遇到技术问题怎么办？</h3>
+    <p>请联系技术支持: <strong>info@smartnailing.com</strong></p>
+  </div>
+
+  <div style="text-align: center; padding: 32px 0;">
+    <a href="/admin/" class="back-link">← 返回CMS后台</a>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,594 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+# Slug sanitization
+slug:
+  encoding: "ascii"
+  clean_accents: true
+  sanitize_replacement: "-"
+
+# ============================================================
+# Collections
+# ============================================================
+
+collections:
+
+  # ----------------------------------------------------------
+  # 1. 媒体资产库 (Media Asset Library)
+  # ----------------------------------------------------------
+  - name: "media-assets"
+    label: "媒体资产库 / Media Assets"
+    label_singular: "媒体资产 / Media Asset"
+    folder: "content/media-assets"
+    create: true
+    slug: "{{slug}}"
+    description: "统一管理全站图片和视频资源，其他模块引用此库资源"
+    summary: "{{title}} — {{asset_type}} — {{tags}}"
+    fields:
+      - { label: "资产名称 / Title", name: "title", widget: "string", hint: "资源的描述性名称" }
+      - { label: "Slug", name: "slug", widget: "string" }
+      - label: "资产类型 / Asset Type"
+        name: "asset_type"
+        widget: "select"
+        options:
+          - { label: "图片 / Image", value: "image" }
+          - { label: "视频 / Video", value: "video" }
+          - { label: "文档 / Document", value: "document" }
+      - { label: "文件上传 / File Upload", name: "file", widget: "file", required: false, hint: "上传本地文件" }
+      - { label: "外部URL / External URL", name: "external_url", widget: "string", required: false, hint: "或填入外部资源链接 (YouTube/Vimeo等)" }
+      - { label: "SEO Alt Text", name: "alt_text", widget: "string", hint: "图片的SEO替代文本，引用时自动继承" }
+      - label: "标签 / Tags"
+        name: "tags"
+        widget: "select"
+        multiple: true
+        options:
+          - { label: "产品演示 / Product Demo", value: "product-demo" }
+          - { label: "工厂环境 / Factory", value: "factory" }
+          - { label: "Hero Banner", value: "hero-banner" }
+          - { label: "证书资质 / Certification", value: "certification" }
+          - { label: "客户案例 / Case Study", value: "case-study" }
+          - { label: "技术图解 / Technical", value: "technical" }
+          - { label: "博客配图 / Blog", value: "blog" }
+          - { label: "团队照片 / Team", value: "team" }
+          - { label: "其他 / Other", value: "other" }
+      - { label: "描述 / Description", name: "description", widget: "text", required: false }
+
+  # ----------------------------------------------------------
+  # 2. 深度产品管理 (Products - Industrial Grade)
+  # ----------------------------------------------------------
+  - name: "products"
+    label: "产品管理 / Products"
+    label_singular: "产品 / Product"
+    folder: "content/products"
+    create: true
+    slug: "{{slug}}"
+    description: "工业级深度产品库，含硬件参数、媒体集成和SEO配置"
+    summary: "{{title}} — {{model}} — {{category}}"
+    fields:
+      - { label: "产品名称 / Product Name", name: "title", widget: "string" }
+      - { label: "Slug", name: "slug", widget: "string" }
+      - { label: "产品型号 / Model Number", name: "model", widget: "string" }
+      - label: "产品分类 / Category"
+        name: "category"
+        widget: "select"
+        options:
+          - { label: "混凝土钉枪 / Concrete Nailers", value: "concrete-nailers" }
+          - { label: "木工钉枪 / Wood Nailers", value: "wood-nailers" }
+          - { label: "保温钉枪 / Insulation Fasteners", value: "insulation-fasteners" }
+          - { label: "围栏订书机 / Fencing Staplers", value: "fencing-staplers" }
+          - { label: "配件 / Accessories", value: "accessories" }
+      - { label: "简短描述 / Short Description", name: "shortDescription", widget: "text" }
+      - { label: "详细描述 / Full Description", name: "body", widget: "markdown" }
+      - { label: "主图 / Featured Image", name: "image", widget: "image", required: false, hint: "建议从媒体资产库选择" }
+
+      # === 硬件参数 (Hardware Specifications) ===
+      - label: "硬件参数 / Hardware Specifications"
+        name: "hardware_specs"
+        widget: "object"
+        collapsed: true
+        fields:
+          - { label: "钉子类型 / Nail Type", name: "nail_type", widget: "string", required: false, hint: "如：混凝土钉、框架钉、精装钉等" }
+          - { label: "钉子长度范围 / Nail Length Range", name: "nail_length_range", widget: "string", required: false, hint: "如：15-72mm" }
+          - { label: "电机类型 / Motor Type", name: "motor_type", widget: "select", required: false, options: ["无刷 / Brushless", "有刷 / Brushed", "N/A"] }
+          - { label: "弹夹容量 / Magazine Capacity", name: "magazine_capacity", widget: "string", required: false }
+          - { label: "重量 (kg) / Weight", name: "weight", widget: "string", required: false }
+          - { label: "冲击能量 (J) / Impact Energy", name: "impact_energy", widget: "string", required: false }
+          - { label: "电压 (V) / Voltage", name: "voltage", widget: "string", required: false }
+          - { label: "击发速度 / Firing Speed", name: "firing_speed", widget: "string", required: false, hint: "如：2发/秒" }
+          - { label: "电池容量 / Battery Capacity", name: "battery_capacity", widget: "string", required: false }
+          - { label: "外壳材质 / Housing Material", name: "housing_material", widget: "string", required: false }
+          - { label: "认证 / Certifications", name: "certifications", widget: "string", required: false, hint: "如：CE, RoHS, ISO 9001" }
+
+      # === 通用规格表 (General Specs - Key-Value) ===
+      - label: "规格参数表 / Specifications"
+        name: "specifications"
+        widget: "list"
+        required: false
+        collapsed: true
+        fields:
+          - { label: "参数名 / Parameter", name: "key", widget: "string" }
+          - { label: "参数值 / Value", name: "value", widget: "string" }
+
+      # === 产品特性 ===
+      - label: "产品特性 / Features"
+        name: "features"
+        widget: "list"
+        required: false
+        field: { label: "特性 / Feature", name: "feature", widget: "string" }
+
+      # === 媒体增强 (Media Enhancement) ===
+      - label: "技术爆炸图 / Exploded View Diagram"
+        name: "exploded_view"
+        widget: "image"
+        required: false
+        hint: "交互式图层展示用的产品爆炸图"
+      - label: "演示视频 / Demo Videos"
+        name: "demo_videos"
+        widget: "list"
+        required: false
+        collapsed: true
+        fields:
+          - { label: "视频标题 / Title", name: "title", widget: "string" }
+          - { label: "视频URL / Video URL", name: "url", widget: "string", hint: "YouTube/Vimeo链接或本地上传路径" }
+          - { label: "视频时长 / Duration", name: "duration", widget: "string", required: false, hint: "如：15s, 30s" }
+      - label: "产品图集 / Product Gallery"
+        name: "gallery"
+        widget: "list"
+        required: false
+        collapsed: true
+        fields:
+          - { label: "图片 / Image", name: "image", widget: "image" }
+          - { label: "Alt Text", name: "alt", widget: "string", required: false }
+
+      # === 关联推荐 ===
+      - label: "关联推荐产品Slug / Related Product Slugs"
+        name: "related_products"
+        widget: "list"
+        required: false
+        field: { label: "产品Slug", name: "slug", widget: "string" }
+
+      # === 应用场景 ===
+      - label: "应用场景 / Application Scenarios"
+        name: "application_scenarios"
+        widget: "list"
+        required: false
+        field: { label: "场景 / Scenario", name: "scenario", widget: "string" }
+
+      # === 包装选项 ===
+      - label: "包装选项 / Package Options"
+        name: "package_options"
+        widget: "list"
+        required: false
+        collapsed: true
+        fields:
+          - { label: "套餐名称 / Package Name", name: "name", widget: "string" }
+          - { label: "描述 / Description", name: "description", widget: "text" }
+          - { label: "包含内容 / Includes", name: "includes", widget: "list", field: { label: "项目", name: "item", widget: "string" } }
+          - { label: "最低起订量 / MOQ", name: "moq", widget: "string" }
+
+      # === 产品FAQ ===
+      - label: "产品常见问题 / Product FAQ"
+        name: "product_faq"
+        widget: "list"
+        required: false
+        collapsed: true
+        fields:
+          - { label: "问题 / Question", name: "question", widget: "string" }
+          - { label: "答案 / Answer", name: "answer", widget: "text" }
+
+      # === SEO 独立控制 ===
+      - label: "SEO 设置 / SEO Settings"
+        name: "seo"
+        widget: "object"
+        collapsed: true
+        required: false
+        fields:
+          - { label: "Meta Title", name: "meta_title", widget: "string", required: false, hint: "留空则使用产品名称" }
+          - { label: "Meta Description", name: "meta_description", widget: "text", required: false }
+          - { label: "Meta Keywords", name: "meta_keywords", widget: "string", required: false, hint: "逗号分隔关键词" }
+          - { label: "自定义Canonical URL", name: "canonical_url", widget: "string", required: false }
+
+      # === PDF Spec Sheet (自动化工具预留) ===
+      - { label: "PDF规格书 / PDF Spec Sheet", name: "pdf_spec_sheet", widget: "file", required: false, hint: "上传产品规格书PDF供前端下载" }
+
+  # ----------------------------------------------------------
+  # 3. 博客管理 (Blog)
+  # ----------------------------------------------------------
+  - name: "blog"
+    label: "博客管理 / Blog"
+    label_singular: "博客文章 / Blog Post"
+    folder: "content/blog"
+    create: true
+    slug: "{{year}}-{{month}}-{{slug}}"
+    description: "博客文章管理，支持Markdown/富文本，含案例研究分类"
+    summary: "{{title}} — {{category}} — {{date}}"
+    fields:
+      - { label: "标题 / Title", name: "title", widget: "string" }
+      - { label: "发布日期 / Publish Date", name: "date", widget: "datetime" }
+      - { label: "封面图 / Featured Image", name: "image", widget: "image", required: false }
+      - label: "分类 / Category"
+        name: "category"
+        widget: "select"
+        options:
+          - { label: "产品指南 / Product Guides", value: "Product Guides" }
+          - { label: "行业洞察 / Industry Insights", value: "Industry Insights" }
+          - { label: "商业 / Business", value: "Business" }
+          - { label: "公司新闻 / Company News", value: "Company News" }
+          - { label: "技术 / Technical", value: "Technical" }
+          - { label: "成功案例 / Case Studies", value: "Case Studies" }
+      - { label: "摘要 / Excerpt", name: "excerpt", widget: "text" }
+      - { label: "正文 / Body", name: "body", widget: "markdown" }
+
+      # === 成功案例专属字段 (Case Study Fields) ===
+      - label: "案例研究字段 / Case Study Fields"
+        name: "case_study"
+        widget: "object"
+        collapsed: true
+        required: false
+        hint: "仅当分类为'成功案例'时填写"
+        fields:
+          - label: "行业分类 / Industry"
+            name: "industry"
+            widget: "select"
+            required: false
+            options:
+              - { label: "建筑工程 / Construction", value: "construction" }
+              - { label: "基础设施 / Infrastructure", value: "infrastructure" }
+              - { label: "制造业 / Manufacturing", value: "manufacturing" }
+              - { label: "农业 / Agriculture", value: "agriculture" }
+              - { label: "能源 / Energy", value: "energy" }
+              - { label: "其他 / Other", value: "other" }
+          - { label: "客户痛点 / Customer Pain Points", name: "pain_points", widget: "text", required: false }
+          - { label: "解决方案详情 / Solution Details", name: "solution", widget: "markdown", required: false }
+          - label: "现场图集 / Site Gallery"
+            name: "site_gallery"
+            widget: "list"
+            required: false
+            fields:
+              - { label: "图片 / Image", name: "image", widget: "image" }
+              - { label: "Alt Text", name: "alt", widget: "string", required: false }
+          - label: "案例视频 / Case Video"
+            name: "case_video"
+            widget: "string"
+            required: false
+            hint: "YouTube/Vimeo链接"
+
+      # === SEO 独立控制 ===
+      - label: "SEO 设置 / SEO Settings"
+        name: "seo"
+        widget: "object"
+        collapsed: true
+        required: false
+        fields:
+          - { label: "Meta Title", name: "meta_title", widget: "string", required: false }
+          - { label: "Meta Description", name: "meta_description", widget: "text", required: false }
+          - { label: "Meta Keywords", name: "meta_keywords", widget: "string", required: false }
+
+  # ----------------------------------------------------------
+  # 4. 信任背书库 (Trust & Authority)
+  # ----------------------------------------------------------
+  - name: "certifications"
+    label: "信任背书库 / Trust & Authority"
+    label_singular: "证书 / Certification"
+    folder: "content/certifications"
+    create: true
+    slug: "{{slug}}"
+    description: "管理企业资质证书，如CE、ISO、RoHS等认证"
+    summary: "{{title}} — {{cert_type}}"
+    fields:
+      - { label: "证书名称 / Certificate Name", name: "title", widget: "string" }
+      - { label: "Slug", name: "slug", widget: "string" }
+      - label: "证书分类 / Certificate Type"
+        name: "cert_type"
+        widget: "select"
+        options:
+          - { label: "CE 认证", value: "CE" }
+          - { label: "ISO 认证", value: "ISO" }
+          - { label: "RoHS 认证", value: "RoHS" }
+          - { label: "UL 认证", value: "UL" }
+          - { label: "TUV 认证", value: "TUV" }
+          - { label: "SGS 认证", value: "SGS" }
+          - { label: "其他 / Other", value: "other" }
+      - { label: "证书编号 / Certificate Number", name: "cert_number", widget: "string", required: false }
+      - { label: "颁发机构 / Issuing Authority", name: "issuing_authority", widget: "string", required: false }
+      - { label: "颁发日期 / Issue Date", name: "issue_date", widget: "datetime", required: false }
+      - { label: "到期日期 / Expiry Date", name: "expiry_date", widget: "datetime", required: false }
+      - { label: "证书图片 / Certificate Image", name: "image", widget: "image", required: false }
+      - { label: "PDF文件 / PDF File", name: "pdf", widget: "file", required: false }
+      - { label: "描述 / Description", name: "description", widget: "text", required: false }
+      - { label: "排序权重 / Sort Order", name: "sort_order", widget: "number", default: 0, required: false }
+
+  # ----------------------------------------------------------
+  # 5. 资源与下载中心 (Resource Center - Lead Magnet)
+  # ----------------------------------------------------------
+  - name: "resources"
+    label: "资源下载中心 / Resource Center"
+    label_singular: "资源 / Resource"
+    folder: "content/resources"
+    create: true
+    slug: "{{slug}}"
+    description: "管理产品手册、参数表、目录等可下载资源"
+    summary: "{{title}} — {{resource_type}}"
+    fields:
+      - { label: "资源名称 / Resource Name", name: "title", widget: "string" }
+      - { label: "Slug", name: "slug", widget: "string" }
+      - label: "文件分类 / Resource Type"
+        name: "resource_type"
+        widget: "select"
+        options:
+          - { label: "产品手册 / Product Manual", value: "manual" }
+          - { label: "参数规格表 / Spec Sheet", value: "spec-sheet" }
+          - { label: "产品目录 / Product Catalog", value: "catalog" }
+          - { label: "安装指南 / Installation Guide", value: "installation-guide" }
+          - { label: "安全数据表 / Safety Data Sheet", value: "safety-data" }
+          - { label: "白皮书 / White Paper", value: "white-paper" }
+          - { label: "其他 / Other", value: "other" }
+      - { label: "PDF文件 / PDF Upload", name: "pdf_file", widget: "file", hint: "上传PDF文件" }
+      - { label: "封面图 / Cover Image", name: "cover_image", widget: "image", required: false, hint: "自定义封面图，建议尺寸 400x560" }
+      - { label: "文件大小 / File Size", name: "file_size", widget: "string", required: false, hint: "如：2.5 MB" }
+      - { label: "关联产品Slug / Related Product", name: "related_product", widget: "string", required: false, hint: "关联的产品slug" }
+      - { label: "描述 / Description", name: "description", widget: "text", required: false }
+      - { label: "发布日期 / Publish Date", name: "date", widget: "datetime" }
+      - { label: "排序权重 / Sort Order", name: "sort_order", widget: "number", default: 0, required: false }
+
+  # ----------------------------------------------------------
+  # 6. 客户见证 (Testimonials)
+  # ----------------------------------------------------------
+  - name: "testimonials"
+    label: "客户见证 / Testimonials"
+    label_singular: "客户见证 / Testimonial"
+    folder: "content/testimonials"
+    create: true
+    slug: "{{slug}}"
+    description: "管理客户评价与见证"
+    summary: "{{name}} — {{company}} — {{country}}"
+    fields:
+      - { label: "客户姓名 / Name", name: "name", widget: "string" }
+      - { label: "Slug", name: "slug", widget: "string" }
+      - { label: "职位 / Position", name: "position", widget: "string" }
+      - { label: "公司 / Company", name: "company", widget: "string", required: false }
+      - { label: "国家 / Country", name: "country", widget: "string", hint: "必填 / Required" }
+      - label: "评价类型 / Testimonial Type"
+        name: "testimonial_type"
+        widget: "select"
+        options:
+          - { label: "文字评价 / Text", value: "text" }
+          - { label: "视频评价 / Video", value: "video" }
+      - { label: "评价内容 / Testimonial Content", name: "content", widget: "text", hint: "客户评价文字内容" }
+      - { label: "视频URL / Video URL", name: "video_url", widget: "string", required: false, hint: "仅视频评价填写" }
+      - { label: "头像 / Avatar", name: "avatar", widget: "image", required: false }
+      - { label: "评分 / Rating", name: "rating", widget: "number", min: 1, max: 5, default: 5, required: false }
+      - { label: "日期 / Date", name: "date", widget: "datetime" }
+      - { label: "是否展示 / Featured", name: "featured", widget: "boolean", default: true }
+      - { label: "排序权重 / Sort Order", name: "sort_order", widget: "number", default: 0, required: false }
+
+  # ----------------------------------------------------------
+  # 7. 常见问题 (FAQ)
+  # ----------------------------------------------------------
+  - name: "faq"
+    label: "常见问题 / FAQ"
+    label_singular: "问答 / FAQ Item"
+    folder: "content/faq"
+    create: true
+    slug: "{{slug}}"
+    description: "管理全站常见问题，支持分类和SEO结构化数据"
+    summary: "{{title}} — {{faq_category}}"
+    fields:
+      - { label: "问题 / Question", name: "title", widget: "string" }
+      - { label: "Slug", name: "slug", widget: "string" }
+      - { label: "答案 / Answer", name: "answer", widget: "markdown" }
+      - label: "分类 / Category"
+        name: "faq_category"
+        widget: "select"
+        options:
+          - { label: "技术问题 / Technical", value: "technical" }
+          - { label: "物流运输 / Logistics", value: "logistics" }
+          - { label: "售后服务 / After-Sales", value: "after-sales" }
+          - { label: "订单采购 / Ordering", value: "ordering" }
+          - { label: "OEM/ODM", value: "oem-odm" }
+          - { label: "产品使用 / Product Usage", value: "product-usage" }
+          - { label: "其他 / Other", value: "other" }
+      - { label: "SEO结构化数据开关 / Enable Schema.org FAQ", name: "enable_schema", widget: "boolean", default: true, hint: "开启后此FAQ将以JSON-LD结构化数据输出，有助于搜索引擎Rich Snippet展示" }
+      - { label: "排序权重 / Sort Order", name: "sort_order", widget: "number", default: 0, required: false }
+
+  # ----------------------------------------------------------
+  # 8. 全球服务网络 (Global Service Network)
+  # ----------------------------------------------------------
+  - name: "service-network"
+    label: "全球服务网络 / Global Service Network"
+    label_singular: "服务节点 / Service Node"
+    folder: "content/service-network"
+    create: true
+    slug: "{{slug}}"
+    description: "管理全球办事处和服务网络信息"
+    summary: "{{title}} — {{region}}"
+    fields:
+      - { label: "办事处名称 / Office Name", name: "title", widget: "string" }
+      - { label: "Slug", name: "slug", widget: "string" }
+      - label: "区域 / Region"
+        name: "region"
+        widget: "select"
+        options:
+          - { label: "亚太 / Asia Pacific", value: "asia-pacific" }
+          - { label: "欧洲 / Europe", value: "europe" }
+          - { label: "北美 / North America", value: "north-america" }
+          - { label: "南美 / South America", value: "south-america" }
+          - { label: "中东非洲 / Middle East & Africa", value: "middle-east-africa" }
+          - { label: "大洋洲 / Oceania", value: "oceania" }
+      - { label: "国家 / Country", name: "country", widget: "string" }
+      - { label: "城市 / City", name: "city", widget: "string" }
+      - { label: "地址 / Address", name: "address", widget: "text", required: false }
+      - { label: "联系人 / Contact Person", name: "contact_person", widget: "string" }
+      - { label: "联系电话 / Phone", name: "phone", widget: "string", required: false }
+      - { label: "邮箱 / Email", name: "email", widget: "string", required: false }
+      - { label: "纬度 / Latitude", name: "latitude", widget: "string", hint: "如: 30.2741" }
+      - { label: "经度 / Longitude", name: "longitude", widget: "string", hint: "如: 120.1551" }
+      - label: "服务范围 / Service Coverage"
+        name: "service_coverage"
+        widget: "list"
+        required: false
+        field: { label: "服务项目 / Service", name: "service", widget: "string" }
+      - { label: "营业时间 / Business Hours", name: "business_hours", widget: "string", required: false }
+      - { label: "排序权重 / Sort Order", name: "sort_order", widget: "number", default: 0, required: false }
+
+  # ----------------------------------------------------------
+  # 9. 页面管理 (Pages)
+  # ----------------------------------------------------------
+  - name: "pages"
+    label: "页面管理 / Pages"
+    description: "管理各页面的内容和配置"
+    files:
+      - label: "首页 / Home Page"
+        name: "home"
+        file: "content/pages/home.md"
+        fields:
+          - { label: "Hero 标语 / Hero Tagline", name: "heroTagline", widget: "string" }
+          - { label: "Hero 副标题 / Hero Subtitle", name: "heroSubtitle", widget: "string" }
+          - { label: "Hero 描述 / Hero Description", name: "heroDescription", widget: "text" }
+          - { label: "Hero 图片 / Hero Image", name: "heroImage", widget: "image", required: false }
+          - label: "首屏视频 / Hero Video"
+            name: "hero_video"
+            widget: "object"
+            collapsed: true
+            required: false
+            fields:
+              - { label: "视频URL / Video URL", name: "video_url", widget: "string", required: false, hint: "YouTube/Vimeo嵌入链接或本地视频路径" }
+              - { label: "视频类型 / Video Type", name: "video_type", widget: "select", required: false, options: ["youtube", "vimeo", "local"] }
+              - { label: "静态占位图 / Poster Image", name: "poster", widget: "image", required: false, hint: "视频加载前的占位图" }
+          - label: "SEO 设置"
+            name: "seo"
+            widget: "object"
+            collapsed: true
+            required: false
+            fields:
+              - { label: "Meta Title", name: "meta_title", widget: "string", required: false }
+              - { label: "Meta Description", name: "meta_description", widget: "text", required: false }
+              - { label: "Meta Keywords", name: "meta_keywords", widget: "string", required: false }
+
+      - label: "关于我们 / About Page"
+        name: "about"
+        file: "content/pages/about.md"
+        fields:
+          - { label: "页面标题 / Page Title", name: "title", widget: "string" }
+          - { label: "页面内容 / Content", name: "body", widget: "markdown" }
+          - label: "SEO 设置"
+            name: "seo"
+            widget: "object"
+            collapsed: true
+            required: false
+            fields:
+              - { label: "Meta Title", name: "meta_title", widget: "string", required: false }
+              - { label: "Meta Description", name: "meta_description", widget: "text", required: false }
+              - { label: "Meta Keywords", name: "meta_keywords", widget: "string", required: false }
+
+      - label: "联系我们 / Contact Page"
+        name: "contact"
+        file: "content/pages/contact.md"
+        fields:
+          - { label: "页面标题 / Page Title", name: "title", widget: "string" }
+          - { label: "页面副标题 / Subtitle", name: "subtitle", widget: "text", required: false }
+          - label: "SEO 设置"
+            name: "seo"
+            widget: "object"
+            collapsed: true
+            required: false
+            fields:
+              - { label: "Meta Title", name: "meta_title", widget: "string", required: false }
+              - { label: "Meta Description", name: "meta_description", widget: "text", required: false }
+              - { label: "Meta Keywords", name: "meta_keywords", widget: "string", required: false }
+
+  # ----------------------------------------------------------
+  # 10. 站点设置 (Site Settings)
+  # ----------------------------------------------------------
+  - name: "settings"
+    label: "站点设置 / Site Settings"
+    description: "全站配置、SEO、分析工具和CRM集成"
+    files:
+      - label: "常规设置 / General Settings"
+        name: "general"
+        file: "content/settings/general.md"
+        fields:
+          - { label: "站点名称 / Site Title", name: "siteTitle", widget: "string" }
+          - { label: "Meta Description", name: "metaDescription", widget: "text" }
+          - { label: "站点Logo / Site Logo", name: "siteLogo", widget: "image", required: false }
+          - { label: "Favicon", name: "favicon", widget: "image", required: false }
+
+          # Analytics & Tracking
+          - label: "分析追踪 / Analytics & Tracking"
+            name: "analytics"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Google Analytics ID (GA4)", name: "gaId", widget: "string", required: false, hint: "GA4 Measurement ID (如 G-XXXXXXX)" }
+              - { label: "Google Tag Manager ID", name: "gtmId", widget: "string", required: false, hint: "GTM Container ID (如 GTM-XXXXXXX)" }
+              - { label: "Google Search Console 验证", name: "gscVerification", widget: "string", required: false }
+              - { label: "百度统计ID / Baidu Analytics", name: "baiduId", widget: "string", required: false }
+
+          # Contact Info
+          - label: "联系信息 / Contact Information"
+            name: "contact_info"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "联系邮箱 / Contact Email", name: "contactEmail", widget: "string" }
+              - { label: "联系电话 / Contact Phone", name: "contactPhone", widget: "string", required: false }
+              - { label: "WhatsApp号码 / WhatsApp Number", name: "whatsappNumber", widget: "string", required: false }
+              - { label: "Skype ID", name: "skypeId", widget: "string", required: false }
+              - { label: "微信号 / WeChat ID", name: "wechatId", widget: "string", required: false }
+              - { label: "公司地址 / Company Address", name: "address", widget: "text", required: false }
+
+          # CRM Integration
+          - label: "CRM集成 / CRM Integration"
+            name: "crm"
+            widget: "object"
+            collapsed: true
+            fields:
+              - label: "CRM类型 / CRM Provider"
+                name: "crm_provider"
+                widget: "select"
+                required: false
+                options:
+                  - { label: "小满 Okki CRM", value: "okki" }
+                  - { label: "企业邮箱 / Enterprise Email", value: "email" }
+                  - { label: "自定义API / Custom API", value: "custom" }
+                  - { label: "禁用 / Disabled", value: "disabled" }
+              - { label: "CRM API Endpoint", name: "crm_api_endpoint", widget: "string", required: false, hint: "CRM系统API地址" }
+              - { label: "通知邮箱 / Notification Email", name: "notification_email", widget: "string", required: false, hint: "接收新线索通知的邮箱" }
+
+          # Multi-language
+          - label: "多语言设置 / Multi-language Settings"
+            name: "i18n"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "默认语言 / Default Language", name: "default_lang", widget: "select", options: ["en", "zh", "es", "de", "fr"], default: "en" }
+              - label: "启用语言 / Enabled Languages"
+                name: "enabled_languages"
+                widget: "select"
+                multiple: true
+                options:
+                  - { label: "English", value: "en" }
+                  - { label: "中文 / Chinese", value: "zh" }
+                  - { label: "Español / Spanish", value: "es" }
+                  - { label: "Deutsch / German", value: "de" }
+                  - { label: "Français / French", value: "fr" }
+                  - { label: "Português / Portuguese", value: "pt" }
+                  - { label: "العربية / Arabic", value: "ar" }
+                  - { label: "日本語 / Japanese", value: "ja" }
+                  - { label: "한국어 / Korean", value: "ko" }
+
+      - label: "社交媒体 / Social Media"
+        name: "social"
+        file: "content/settings/social.md"
+        fields:
+          - { label: "Facebook URL", name: "facebook", widget: "string", required: false }
+          - { label: "LinkedIn URL", name: "linkedin", widget: "string", required: false }
+          - { label: "YouTube URL", name: "youtube", widget: "string", required: false }
+          - { label: "Instagram URL", name: "instagram", widget: "string", required: false }
+          - { label: "Twitter/X URL", name: "twitter", widget: "string", required: false }
+          - { label: "阿里巴巴 / Alibaba URL", name: "alibaba", widget: "string", required: false }
+          - { label: "Made-in-China URL", name: "madeinchina", widget: "string", required: false }

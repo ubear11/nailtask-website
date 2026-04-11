@@ -1,0 +1,11 @@
+# NailTask - smartnailing.com
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://smartnailing.com/sitemap.xml
+
+# Disallow admin and internal paths
+Disallow: /admin/
+Disallow: /_netlify/
+Disallow: /.netlify/
