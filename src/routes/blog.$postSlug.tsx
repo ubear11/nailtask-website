@@ -1,7 +1,6 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start/server'
 import { useT } from '@/lib/i18n'
-import { getBlogPostBySlug as getCmsPost } from '@/lib/content'
 import { getBlogPostBySlug as getHardcodedPost } from '@/data/blog-posts'
 import { Calendar, Tag, ArrowRight } from 'lucide-react'
 
@@ -11,6 +10,7 @@ const fetchBlogPost = createServerFn({ method: 'GET' })
   .handler(async ({ data: slug }) => {
     try {
       // 首先尝试从 CMS 内容获取
+      const { getBlogPostBySlug: getCmsPost } = await import('@/lib/content.server')
       const cmsPost = getCmsPost(slug)
       if (cmsPost) return cmsPost
 
@@ -95,11 +95,7 @@ function BlogPostPage() {
       {/* Featured Image */}
       {post.image && post.image !== '/placeholder.png' && (
         <div className="max-w-4xl mx-auto px-4 sm:px-6 -mt-8">
-          <img
-            src={post.image}
-            alt={post.title}
-            className="w-full rounded-xl shadow-lg"
-          />
+          <img src={post.image} alt={post.title} className="w-full rounded-xl shadow-lg" />
         </div>
       )}
 
