@@ -1,7 +1,7 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start/server'
 import { useT } from '@/lib/i18n'
-import { getAllBlogPosts, type BlogPost } from '@/lib/content'
+import type { BlogPost } from '@/lib/content'
 import hardcodedPosts from '@/data/blog-posts'
 import { ArrowRight, Calendar, Tag } from 'lucide-react'
 
@@ -9,9 +9,10 @@ import { ArrowRight, Calendar, Tag } from 'lucide-react'
 const fetchBlogPosts = createServerFn({ method: 'GET' }).handler(async () => {
   try {
     // 从 content/ 目录获取 CMS 发布的文章
+    const { getAllBlogPosts } = await import('@/lib/content')
     const cmsPosts = getAllBlogPosts()
 
-    // 合并 CMS 文章和硬编码文章，CMS 文章优先
+    // 合并 CMS 文章 and 硬编码文章，CMS 文章优先
     const cmsSlugSet = new Set(cmsPosts.map(p => p.slug))
     const fallbackPosts = hardcodedPosts.filter(p => !cmsSlugSet.has(p.slug))
 
