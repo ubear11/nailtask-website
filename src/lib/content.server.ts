@@ -1,9 +1,13 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import type { BlogPost, PageContent, Product } from '@/lib/types'
 
 // 简单的 frontmatter 解析器
 function parseFrontmatter(content: string): { data: Record<string, any>; content: string } {
-  const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/
+  const frontmatterRegex = /^---s*
+([sS]*?)
+---s*
+([sS]*)$/
   const match = content.match(frontmatterRegex)
 
   if (!match) {
@@ -15,7 +19,8 @@ function parseFrontmatter(content: string): { data: Record<string, any>; content
 
   // 解析 YAML-like frontmatter
   const data: Record<string, any> = {}
-  const lines = frontmatterStr.split('\n')
+  const lines = frontmatterStr.split('
+')
 
   for (const line of lines) {
     const colonIndex = line.indexOf(':')
@@ -34,22 +39,6 @@ function parseFrontmatter(content: string): { data: Record<string, any>; content
   }
 
   return { data, content: bodyContent }
-}
-
-// 博客文章接口
-export interface BlogPost {
-  slug: string
-  title: string
-  date: string
-  excerpt: string
-  image: string
-  category: string
-  content: string
-}
-
-// 页面内容接口
-export interface PageContent {
-  [key: string]: any
 }
 
 // 获取内容目录路径
@@ -75,7 +64,6 @@ function readMarkdownFiles(dir: string): { slug: string; data: Record<string, an
     const fileContent = fs.readFileSync(filePath, 'utf-8')
     const { data, content } = parseFrontmatter(fileContent)
     const slug = data.slug || filename.replace('.md', '')
-
     return { slug, data, content }
   })
 }
@@ -83,7 +71,6 @@ function readMarkdownFiles(dir: string): { slug: string; data: Record<string, an
 // 获取所有博客文章
 export function getAllBlogPosts(): BlogPost[] {
   const files = readMarkdownFiles('blog')
-
   const posts = files.map(({ slug, data, content }) => ({
     slug,
     title: data.title || 'Untitled',
@@ -139,18 +126,6 @@ export function getSiteSettings(): PageContent {
   }
 
   return { ...general, social }
-}
-
-// 获取所有产品
-export interface Product {
-  slug: string
-  title: string
-  model: string
-  category: string
-  shortDescription: string
-  image: string
-  features: string[]
-  content: string
 }
 
 export function getAllProducts(): Product[] {
