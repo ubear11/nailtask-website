@@ -8,8 +8,10 @@ import { ArrowRight, Calendar, Tag } from 'lucide-react'
 // 服务器端函数：获取所有博客文章
 const fetchBlogPosts = createServerFn({ method: 'GET' }).handler(async () => {
   try {
-    // 从 content/ 目录获取 CMS 发布的文章
+    // 核心修复：仅在服务器运行时动态加载 fs 相关代码
     const { getAllBlogPosts } = await import('@/lib/content.server')
+    
+    // 从 content/ 目录获取 CMS 发布的文章
     const cmsPosts = getAllBlogPosts()
 
     // 合并 CMS 文章 and 硬编码文章，CMS 文章优先
@@ -46,58 +48,60 @@ function BlogIndex() {
   const { posts } = Route.useLoaderData()
 
   return (
-    <div>
-      <section className="bg-slate-900 text-white py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <h1 className="text-3xl md:text-5xl font-bold mb-4">{t('blog.title')}</h1>
-          <p className="text-xl text-slate-300 max-w-2xl">{t('blog.subtitle')}</p>
-        </div>
-      </section>
+    <div className="container mx-auto px-4 py-12 max-w-7xl">
+      <div className="mb-12">
+        <h1 className="text-4xl font-bold mb-4">{t('blog.title')}</h1>
+        <p className="text-xl text-muted-foreground">{t('blog.subtitle')}</p>
+      </div>
 
-      <section className="py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          {posts.length === 0 ? (
-            <div className="text-center py-16">
-              <p className="text-slate-500 text-lg">暂无博客文章</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {posts.map((post: BlogPost) => (
-                <Link
-                  key={post.slug}
-                  to="/blog/$postSlug"
-                  params={{ postSlug: post.slug }}
-                  className="group bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-xl hover:border-amber-300 transition-all"
-                >
-                  <div className="aspect-[16/9] bg-slate-100 overflow-hidden">
-                    <img
-                      src={post.image || '/placeholder.png'}
-                      alt={post.title}
-                      loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center gap-4 text-sm text-slate-500 mb-3">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-4 h-4" /> {post.date}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Tag className="w-4 h-4" /> {post.category}
-                      </span>
-                    </div>
-                    <h2 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-amber-600 transition-colors">{post.title}</h2>
-                    <p className="text-slate-600 leading-relaxed mb-4">{post.excerpt}</p>
-                    <span className="inline-flex items-center gap-1 text-sm font-semibold text-amber-600">
-                      {t('blog.readMore')} <ArrowRight className="w-4 h-4" />
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
+      {posts.length === 0 ? (
+        <div className="text-center py-20 bg-muted/30 rounded-lg">
+          <p className="text-lg text-muted-foreground">暂无博客文章</p>
         </div>
-      </section>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {posts.map((post: BlogPost) => (
+            <Link 
+              to="/blog/$slug" 
+              params={{ slug: post.slug }} 
+              key={post.slug}
+              className="group flex flex-col bg-card border rounded-xl overflow-hidden hover:shadow-lg transition-all"
+            >
+              {post.image && (
+                <div className="aspect-video relative overflow-hidden">
+                  <img 
+                    src={post.image} 
+                    alt={post.title}
+                    className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+              )}
+              <div className="p-6 flex-1 flex flex-col">
+                <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
+                  <div className="flex items-center gap-1">
+                    <Calendar className="w-4 h-4" />
+                    <span>{post.date}</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Tag className="w-4 h-4" />
+                    <span>{post.category}</span>
+                  </div>
+                </div>
+                <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
+                  {post.title}
+                </h3>
+                <p className="text-muted-foreground line-clamp-3 mb-6 flex-1">
+                  {post.excerpt}
+                </p>
+                <div className="flex items-center gap-2 text-primary font-medium group-hover:underline">
+                  {t('blog.readMore')}
+                  <ArrowRight className="w-4 h-4" />
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
